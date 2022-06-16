@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthJwtController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,7 +14,17 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'auth'
+], function ($router) {
+    Route::post('/login', [AuthJwtController::class, 'login']);
+    Route::post('/register', [AuthJwtController::class, 'register']);
+    Route::post('/logout', [AuthJwtController::class, 'logout']);
+    Route::post('/refresh', [AuthJwtController::class, 'refresh']);
+    Route::get('/user-profile', [AuthJwtController::class, 'userProfile']);
 });
+
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
